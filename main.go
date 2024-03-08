@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 const port = ":3000"
@@ -12,7 +14,13 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSnippetView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display a snippet"))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 0 {
+		http.NotFound(w, r)
+		return
+	}
+
+	fmt.Fprintf(w, "Display snippet with id: %d", id)
 }
 
 func handleSnippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +30,7 @@ func handleSnippetCreate(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /", handleHome)
+	mux.HandleFunc("GET /{$}", handleHome)
 	mux.HandleFunc("GET /snippet/view", handleSnippetView)
 	mux.HandleFunc("POST /snippet/create", handleSnippetCreate)
 
