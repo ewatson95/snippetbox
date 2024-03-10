@@ -9,7 +9,11 @@ import (
 )
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	files := []string{"./ui/html/base.tmpl", "./ui/html/pages/home.tmpl"}
+	files := []string{
+		"./ui/html/base.tmpl",
+		"./ui/html/pages/home.tmpl",
+		"./ui/html/partials/nav.tmpl",
+	}
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
